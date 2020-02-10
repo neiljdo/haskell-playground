@@ -56,3 +56,38 @@ c = add' 3 5
 add3 :: Int -> Int
 add3 = add' 3
 d = add3 5
+
+
+{-
+Class := collection of *types* that support certain overloaded operations called *methods*
+-}
+
+-- Exercises
+-- 3. What are the types of the following functions?
+second :: [a] -> a
+second xs = head (tail xs)
+
+swap :: (a, b) -> (b, a)
+swap (x, y) = (y, x)
+
+pair :: a -> b -> (a, b)
+pair x y = (x, y)
+
+-- GOTCHA: Need a to be a member of the Eq type,
+-- otherwise we won't be able to check for equality
+palindrome :: Eq a => [a] -> Bool
+palindrome xs = reverse xs == xs
+
+twice :: (a -> a) -> a -> a
+twice f x = f (f x)
+
+mult10 x = x * 10
+mult100 = twice mult10
+{-
+> mult100 52
+5200
+-}
+
+-- 5. Why is it not feasible in general for function types to be instance of the Eq class?
+-- When is it feasible? HINT: Two functions of the same type are equel if they always
+-- return equal results for equal arguments.
