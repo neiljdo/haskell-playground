@@ -89,5 +89,5 @@ mult100 = twice mult10
 -}
 
 -- 5. Why is it not feasible in general for function types to be instance of the Eq class?
--- When is it feasible? HINT: Two functions of the same type are equel if they always
--- return equal results for equal arguments.
+--    When is it feasible? HINT: Two functions of the same type are equel if they always
+--    return equal results for equal arguments.
