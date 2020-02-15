@@ -20,11 +20,12 @@ b = head (reverse [1..5])
 
 
 -- `init` as a function of other library functions
-c = init [1..7]
+xs = [1..7]
+c = init xs
 -- is the same as
-d = reverse (tail (reverse [1..7]))
+d = reverse (tail (reverse xs))
 -- and also the same as
-e = take (length [1..7] - 1) [1..7]
+e = take (length xs - 1) xs
 
 {-
 $> c
@@ -34,3 +35,4 @@ $> d
 $> e
 [1,2,3,4,5,6]
 -}
+main = putStrLn (concat ["c = ", show c, "; d = ", show d, "; e = ", show e])
