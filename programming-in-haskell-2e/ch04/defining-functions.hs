@@ -25,6 +25,7 @@ _    && _    = False
 
 {-
 How the prelude defines (&&):
+
 True && b  = b
 False && _ = False
 -}
@@ -53,3 +54,28 @@ halve xs = (h1, h2) where
     h1 = take sizehalf xs
     h2 = drop sizehalf xs
     sizehalf = length xs `div` 2
+
+-- 2. Define a function `third` that returns the third element in a list that contains
+--    at least this many elements using:
+third1 :: [a] -> a
+third1 xs = head (tail (tail xs))
+
+third2 :: [a] -> a
+third2 xs = xs !! 2
+
+third3 :: [a] -> a
+third3 (_:_:x:_) = x
+
+-- 3. Consider a function `safetail :: [a] -> [a]` that behaves in the same way as
+--    `tail` except that it maps the empty list to itself rather than producing an error.
+--    Using `tail` and the function `null :: [a] -> Bool` that decides if a list is empty
+--    or not, define `safetail` using:
+safetail1 :: [a] -> [a]
+safetail1 xs = if null xs then [] else tail xs
+
+safetail2 :: [a] -> [a]
+safetail2 xs | null xs      = []
+             | otherwise    = tail xs
+
+safetail3 :: [a] -> [a]
+safetail3 (_:xs) = xs
