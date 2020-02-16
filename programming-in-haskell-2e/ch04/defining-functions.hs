@@ -55,6 +55,7 @@ halve xs = (h1, h2) where
     h2 = drop sizehalf xs
     sizehalf = length xs `div` 2
 
+
 -- 2. Define a function `third` that returns the third element in a list that contains
 --    at least this many elements using:
 third1 :: [a] -> a
@@ -65,6 +66,7 @@ third2 xs = xs !! 2
 
 third3 :: [a] -> a
 third3 (_:_:x:_) = x
+
 
 -- 3. Consider a function `safetail :: [a] -> [a]` that behaves in the same way as
 --    `tail` except that it maps the empty list to itself rather than producing an error.
@@ -79,3 +81,49 @@ safetail2 xs | null xs      = []
 
 safetail3 :: [a] -> [a]
 safetail3 (_:xs) = xs
+
+
+-- 7. Show how the meaning of the following curried function definition can be formalised
+--    in terms of lambda expressions:
+--    mult :: Int -> Int -> Int -> Int
+--    mult x y z = x * y * z
+
+-- For the innermost lambda function, it should take a single input and a function of
+-- the other variables. We build upon this innermost function, removing argument layers
+-- along the way.
+mult :: Int -> Int -> Int -> Int
+mult = \x -> (\y -> (\z -> x * y * z))
+
+multBy3 = mult 3            -- returns a function of y and z, i.e. we fix x = 3
+multBy12 = multBy3 4        -- returns a function of z, i.e. we fix x = 3, y = 4
+
+
+-- 8. The _Luhn algorithm_ is used to check bank card numbers for simple errors such as
+--    mistyping a digist, and proceeds as follows:
+--    * consider each digit as a separate number;
+--    * moving left, double every other number from the second last;
+--    * subtract 9 from each number that is now greater than 9;
+--    * add all the resulting numbers together;
+--    * if the total is divisible by 10, the card number is valid
+--    Define a function `luhnDouble` that doubles a digit and subtracts 9 if the result
+--    is greater than 9.
+luhnDouble :: Int -> Int
+luhnDouble x = (2 * x) `mod` 9 
+
+--    Using `luhnDouble` and the integer remainder function `mod`, define
+--    a function `luhn` that decides if a four-digit bank card number is valid.
+luhn :: Int -> Int -> Int -> Int -> Bool
+luhn x y z w = ((luhnDouble x + y + luhnDouble z + w) `mod` 10) == 0 
+
+
+main = do
+    print (multBy12 5)
+    print (multBy12 10)
+
+    -- luhnDouble
+    print (luhnDouble 3)
+    print (luhnDouble 6)
+
+    -- luhn (naïve)
+    print (luhn 1 7 8 4)
+    print (luhn 4 7 8 3)
