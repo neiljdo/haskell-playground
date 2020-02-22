@@ -56,6 +56,21 @@ sumsquares n = sum [x^2 | x <- [1..n]]
 grid :: Int -> Int -> [(Int, Int)]
 grid m n = [(x, y) | x <- [0..m], y <- [0..n]]
 
+-- 3. Using list comprehension and `grid` above, define a function that returns a coordinate
+--    square of size n, excludin gthe diagonal from (0, 0) to (n, n). For example:
+--    > square 2
+--    [(0,1),(0,2),(1,0),(1.2),(2,0),(2,1)]
+square :: Int -> [(Int, Int)]
+square n = [(x, y) | (x, y) <- grid n n, x /= y]
+
+-- 4. In a similar way to the function `length`, show how the library function `replicate`
+--    that produces a list of identical element scan be defined using a list comprehension.
+--    For example:
+--    > replicate 3 True
+--    [True,True,True]
+replicatez :: Int -> a -> [a]
+replicatez n a = [a | _ <- [1..n]]
+
 
 main = do
     print a
@@ -77,3 +92,5 @@ main = do
     print "Exercises"
     print (sumsquares 100)
     print (grid 1 2)
+    print (square 2)
+    print (replicatez 3 True)
