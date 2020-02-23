@@ -6,6 +6,7 @@ import Data.Char
 a = [x^2 | x <- [1..5]]
 
 -- e.g. generate cartesian product of two sets
+--      X × Y = {(x, y) ∣ x ∈ X and y ∈ Y} 
 b = [(x, y) | x <- [1..3], y <- [4..5]]
 
 -- e.g. concatenate a list of lists into a single list
