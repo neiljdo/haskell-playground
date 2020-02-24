@@ -73,7 +73,15 @@ odd_ n = even_ (n - 1)
 
 
 -- Exercises
--- 1.
+-- 1. How does the recursive version of the factorial function behave
+--    if applied to arguments < 0
+--    Answer: It goes into infinite recursion since we keep on subtracting 1
+--    from the argument during the recursive step. An improvement would be
+facR2 :: Int -> Int
+facR2 0 = 1                                          -- Base case
+facR2 n | n < 0          = -1                        -- Bad case, but need to return an Int output
+        | otherwise      = n * facR2 (n - 1)          -- (Proper) recursive case
+
 -- 2.
 -- 3.
 
