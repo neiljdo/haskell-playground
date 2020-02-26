@@ -125,8 +125,38 @@ euclid m n | m == n         = m
 --       = 1 + 1 + 1 + 0
 --       3
 --    b) > drop 3 [1,2,3,4,5]
+--       = drop 2 [2,3,4,5]
+--       = drop 1 [3,4,5]
+--       = drop 0 [4,5]
+--       [4,5]
 --    c) > init [1,2,3]
+--       = 1 : init [2,3]
+--       = 1 : 2 : init [3]
+--       = 1 : 2 : []
+--       [1,2]
 
+-- 6. Without looking at the definitions from the standard prelude, define the following
+--    library functions on lists using recursion:
+and_ :: [Bool] -> Bool
+and_ [True] = True
+and_ (False:xs) = False
+and_ (True:xs) = and_ xs
+
+concat_ :: [[a]] -> [a] 
+concat_ [x] = x
+concat_ (x:xs) = x ++ concat_ xs
+
+replicate_ :: Int -> a -> [a]
+replicate_ 0 _ = []
+replicate_ n x = x : replicate_ (n - 1) x
+
+elementAt :: [a] -> Int -> a
+elementAt (x:xs) 0 = x
+elementAt (x:xs) n = elementAt xs (n - 1)
+
+elem_ :: Eq a => a -> [a] -> Bool
+elem_ y [] = False
+elem_ y (x:xs) = (y == x) || elem_ y xs
 
 
 main = do
