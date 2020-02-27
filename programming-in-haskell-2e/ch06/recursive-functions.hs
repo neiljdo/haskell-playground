@@ -158,6 +158,36 @@ elem_ :: Eq a => a -> [a] -> Bool
 elem_ y [] = False
 elem_ y (x:xs) = (y == x) || elem_ y xs
 
+-- 7. Define a recursive function `merge` that merges two sorted lists to give a single
+--    sorted list. For example:
+--    > merge [2,5,6] [1,3,4]
+--    [1,2,3,4,5,6]
+merge :: Ord a => [a] -> [a] -> [a]
+merge l [] = l
+merge [] r = r
+merge (l:ls) (r:rs) | l < r         = l : merge ls (r:rs)
+                    | otherwise     = r : merge (l:ls) rs
+
+-- 8. Using `merge`, define a function `msort` that implements _merge sort_, in which
+--    the empty list and singleton lists are already sorted, and any other list is sorted
+--    by merging together the two lists that result from sorting the two halves of
+--    the list separately. Hint: first define a function `halve` that splits a list into
+--    two two halves whose lengths differ by at most one.
+halve :: [a] -> ([a], [a])
+halve xs = splitAt n xs where
+    n = length xs `div` 2
+
+msort :: Ord a => [a] -> [a]
+msort []  = []
+msort [x] = [x]
+msort xs  = merge (msort left) (msort right) where
+    (left, right) = halve xs
+
+-- 9. Using the five-step process, construct the library functions that:
+--    a) calculate the `sum` of a list of numbers;
+--    b) `take` a given number of elements from the start of a list;
+--    c) select the `last` element of a non-empty list
+
 
 main = do
     print (productz [1..10])
@@ -175,3 +205,6 @@ main = do
     print (euclid 6 27)
     print (euclid 5 27)
     print (euclid 18 27)
+
+    print (merge [2,5,6] [1,3,4])
+    print (msort [6,5,4,3,2,1])
