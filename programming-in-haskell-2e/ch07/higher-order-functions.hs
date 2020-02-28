@@ -44,8 +44,25 @@ filterr f (x:xs) | f x              = x : filterr f xs
 -- [6,7]                # starts at 6, since the next element is even
 
 -- 7.3 The `foldr` function
+-- The following is a common recursion pattern on lists:
+-- f []         = v
+-- f (x:xs)     = x # f xs, where '#' is an operator
+-- e.g.
+-- sum []       = 0
+-- sum (x:xs)   = x + sum xs
+-- Using `foldr`, this can be more succinctly written as
+-- sum :: Num a => [a] -> a
+-- sum = foldr (+) 0
+-- NOTE: For the `foldr` function, the operator `#` is assumed to associate to the right
 
 -- 7.4 The `foldl` function
+-- This is the analog of `foldr` for the following recursion pattern:
+-- NOTE: Notice the use of the first argument as an **accumulator**
+-- f v []       = v
+-- f v (x:xs)   = f (v # x) xs
+-- NOTE: For the `foldl` function, the operator `#` is assumed to associate to the left.
+-- For associative operators, i.e. left and right associative, the choice should be based
+-- on efficiency considerations.
 
 -- 7.5 The composition operator
 
