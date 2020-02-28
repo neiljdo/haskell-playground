@@ -76,11 +76,36 @@ filterr f (x:xs) | f x              = x : filterr f xs
 -- 7.7.2 Alternative vote
 
 -- Exercises
--- 1.
--- 2.
--- 3.
+-- 1. Show how the list comprehension `[f x | x <- xs, p x]` can be expressed using
+--    the higher-order functions `map` and `filter`.
+lc :: (a -> b) -> (a -> Bool) -> [a] -> [b]
+lc f p xs = [f x | x <- xs , p x] 
+
+lc2 :: (a -> b) -> (a -> Bool) -> [a] -> [b]
+lc2 f p xs = map f (filter p xs)
+
+-- 2. Without looking at the definitions from the standard prelude, define the following
+--    higer-order library functions on lists:
+all_ :: (a -> Bool) -> [Bool] -> Bool
+
+any_ :: (a -> Bool) -> [Bool] -> Bool
+
+takeWhile_ :: (a -> Bool) -> [a] -> [a]
+
+dropWhile_ :: (a -> Bool) -> [a] -> [a]
+
+-- 3. Redefine the functions `map f` and `filter p` using `foldr`.
+
+-- 4. Using `foldl`, define a function `dec2int` that converts a decimal number into
+--    an integer. For example:
+--    > dec2int [2,3,4,5]
+--    2345
+dec2Int :: [Int] -> Int
 
 
 main = do
     print (twice (*2) 4)
     print "Exercises"
+    let a = [0,1,2,3,4,5]
+    print (lc (+1) odd a)
+    print (lc2 (+1) odd a)
