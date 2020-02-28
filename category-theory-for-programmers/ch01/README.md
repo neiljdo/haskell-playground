@@ -14,14 +14,14 @@ Composition obeys:
 
 -   *Associativity*
 
-    If `f := A -> B`, `g := B -> C`, `h := C -> D`, then:
+    If `f := A -> B`, `g := B -> C`, `h := C -> D`, then:<br>
     `(h . g) . f = h . (g . f) = h . g . f`
 
 -   *Identity*
 
-    Each object `X` in a category has its identity morphism `id_X`.
-    If `f := A -> B`, then:
-    `f . id_A = f = id_B . f`.
+    Each object `X` in a category has its identity morphism `id_X`.<br>
+    If `f := A -> B`, then:<br>
+    `f . id_A = f = id_B . f`
 
 ## A change of perspective
 
