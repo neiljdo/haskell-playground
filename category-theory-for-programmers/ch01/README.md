@@ -13,10 +13,12 @@ e.g. If objects `A`, `B`, and `C`, and morphisms `f := A -> B` and `g := B -> C`
 Composition obeys:
 
 -   *Associativity*
+
     If `f := A -> B`, `g := B -> C`, `h := C -> D`, then:
     `(h . g) . f = h . (g . f) = h . g . f`
 
 -   *Identity*
+
     Each object `X` in a category has its identity morphism `id_X`.
     If `f := A -> B`, then:
     `f . id_A = f = id_B . f`.
