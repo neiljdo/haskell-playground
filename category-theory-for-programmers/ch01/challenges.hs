@@ -3,6 +3,7 @@
 id_:: a -> a
 id_ x = x
 
+
 -- 2. Implement the composition function in your favorite language. It takes two functions
 --    as arguments and returns a function that is their composition.
 compose :: (b -> c) -> (a -> b) -> a -> c
@@ -21,15 +22,19 @@ compose2 g f = \x -> g (f x)
 dblThenInc1      = compose (\x -> x + 1) (\x -> 2 * x)
 dblThenInc1Again = compose (\x -> x + 1) (\x -> 2 * x)
 
+
 -- 3. Write a program that tries to test that your composition function respects identity.
 --    TODO: Missing answer.
+
 
 -- 4. Is the world-wide web a category in any sense? Are links morphisms?
 --    Answer: If web pages are the objects with links as morphisms, then it is not a category.
 
+
 -- 5. Is Facebook a category, with people as objects and friendships as morphisms?
 --    Answer: No. The "friendship morphism" is not composable, i.e. the friend of
 --    my friend is not necessarily my friend.
+
 
 -- 6. When is a directed graph a category?
 --    Answer: Given any directed graph, we can turn it into a category by adding:
