@@ -1,3 +1,5 @@
+import Data.Char
+
 -- 7. Higher-order functions
 
 -- 7.1 Basic concepts
@@ -46,7 +48,8 @@ filterr f (x:xs) | f x              = x : filterr f xs
 -- 7.3 The `foldr` function
 -- The following is a common recursion pattern on lists:
 -- f []         = v
--- f (x:xs)     = x # f xs, where '#' is an operator
+-- f (x:xs)     = x # f xs, where '#' is an operator (infix here)
+--              = (#) x (f xs)      (alternative prefix notation, sometimes more useful)
 -- e.g.
 -- sum []       = 0
 -- sum (x:xs)   = x + sum xs
@@ -65,10 +68,35 @@ filterr f (x:xs) | f x              = x : filterr f xs
 -- on efficiency considerations.
 
 -- 7.5 The composition operator
+(.) :: (b -> c) -> (a -> b) -> (a -> c)
+g . f = \x -> g (f x)
 
 -- 7.6 Binary string transmitter
 -- 7.6.1 Binary numbers
 -- 7.6.2 Base conversion
+type Bit = Int
+
+-- NOTE: [Bit] here is the right to left representation of a binary number,
+-- e.g. 1101 (base 2) = [1,0,1,1]
+bin2int :: [Bit] -> Int
+bin2int bits = sum [w * b | (w, b) <- zip weights bits] where
+                    weights = iterate (*2) 1
+
+-- Simpler `bit2int` using some algebra:
+-- (1 * a) + (2 * b) + (4 * c) + (8 * d)
+-- = a + 2 * (b + (2 * c) + (4 * d))
+-- = a + 2 * (b + 2 * (c + (2 * d)))
+-- = a + 2 * (b + 2 * (c + 2 * (d + (2 * 0))))
+bin2int_ :: [Bit] -> Int
+bin2int_ = foldr (\x y -> x + 2 * y) 0
+-- bin2int_ [] = 0
+-- bin2int_ (x:xs) = (\x y -> x + 2 * y) x (bin2int_ xs)
+--                 = x + 2 * (bin2int_ xs), and so on..
+
+int2bin_ :: Int -> [Bit]
+int2bin_ 0 = []
+int2bin_ n = n `mod` 2 : int2bin_ (n `div` 2)
+
 -- 7.6.3 Transmission
 
 -- 7.7 Voting algorithms
@@ -86,13 +114,13 @@ lc2 f p xs = map f (filter p xs)
 
 -- 2. Without looking at the definitions from the standard prelude, define the following
 --    higer-order library functions on lists:
-all_ :: (a -> Bool) -> [Bool] -> Bool
+-- all_ :: (a -> Bool) -> [Bool] -> Bool
 
-any_ :: (a -> Bool) -> [Bool] -> Bool
+-- any_ :: (a -> Bool) -> [Bool] -> Bool
 
-takeWhile_ :: (a -> Bool) -> [a] -> [a]
+-- takeWhile_ :: (a -> Bool) -> [a] -> [a]
 
-dropWhile_ :: (a -> Bool) -> [a] -> [a]
+-- dropWhile_ :: (a -> Bool) -> [a] -> [a]
 
 -- 3. Redefine the functions `map f` and `filter p` using `foldr`.
 
@@ -100,11 +128,17 @@ dropWhile_ :: (a -> Bool) -> [a] -> [a]
 --    an integer. For example:
 --    > dec2int [2,3,4,5]
 --    2345
-dec2Int :: [Int] -> Int
+-- dec2Int :: [Int] -> Int
 
 
 main = do
     print (twice (*2) 4)
+
+    print "Binary string transmitter"
+    print (bin2int [1,0,1,1])
+    print (bin2int_ [1,0,1,1])
+    print (int2bin_ (bin2int_ [1,0,1,1]))
+
     print "Exercises"
     let a = [0,1,2,3,4,5]
     print (lc (+1) odd a)
