@@ -68,8 +68,8 @@ filterr f (x:xs) | f x              = x : filterr f xs
 -- on efficiency considerations.
 
 -- 7.5 The composition operator
-(.) :: (b -> c) -> (a -> b) -> (a -> c)
-g . f = \x -> g (f x)
+dot :: (b -> c) -> (a -> b) -> (a -> c)
+dot g f = \x -> g (f x)
 
 -- 7.6 Binary string transmitter
 -- 7.6.1 Binary numbers
@@ -93,15 +93,35 @@ bin2int_ = foldr (\x y -> x + 2 * y) 0
 -- bin2int_ (x:xs) = (\x y -> x + 2 * y) x (bin2int_ xs)
 --                 = x + 2 * (bin2int_ xs), and so on..
 
+-- While the reverse process could be implemented as
 int2bin_ :: Int -> [Bit]
 int2bin_ 0 = []
 int2bin_ n = n `mod` 2 : int2bin_ (n `div` 2)
 
+-- Function that makes sure we have an 8-bit representation
+-- NOTE: `repeat` here creates an infinite list, but since the `take` call only asks for
+-- 8 elements, it will eventually terminate.
+make8 :: [Bit] -> [Bit]
+make8 bits = take 8 (bits ++ repeat 0)
+
 -- 7.6.3 Transmission
+-- By composing the functions above, we can create a function that "transmits" an input
+-- string as a sequence of bits.
+encode :: String -> [Bit]
+encode = concat . map (make8 . int2bin_ . ord)          -- There is even a `concatMap`
+
+-- To decode a transmission
+chop8 :: [Bit] -> [[Bit]]
+chop8 [] = []
+chop8 bits = take 8 bits : chop8 (drop 8 bits)
+
+decode :: [Bit] -> String
+decode = map (chr . bin2int) . chop8
 
 -- 7.7 Voting algorithms
 -- 7.7.1 First past the post
 -- 7.7.2 Alternative vote
+
 
 -- Exercises
 -- 1. Show how the list comprehension `[f x | x <- xs, p x]` can be expressed using
@@ -114,7 +134,11 @@ lc2 f p xs = map f (filter p xs)
 
 -- 2. Without looking at the definitions from the standard prelude, define the following
 --    higer-order library functions on lists:
--- all_ :: (a -> Bool) -> [Bool] -> Bool
+all_ :: (a -> Bool) -> [a] -> Bool
+all_ p [] = True
+all_ p (x:xs) = p x && all_ p xs
+
+-- TODO: Add `fold` implementation.
 
 -- any_ :: (a -> Bool) -> [Bool] -> Bool
 
@@ -138,6 +162,9 @@ main = do
     print (bin2int [1,0,1,1])
     print (bin2int_ [1,0,1,1])
     print (int2bin_ (bin2int_ [1,0,1,1]))
+    let encoded = encode "abc"
+    print encoded
+    print (decode encoded)
 
     print "Exercises"
     let a = [0,1,2,3,4,5]

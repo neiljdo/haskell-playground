@@ -35,4 +35,5 @@ $> d
 $> e
 [1,2,3,4,5,6]
 -}
+
 main = putStrLn (concat ["c = ", show c, "; d = ", show d, "; e = ", show e])
