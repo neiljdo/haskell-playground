@@ -58,6 +58,8 @@ filterr f (x:xs) | f x              = x : filterr f xs
 -- sum = foldr (+) 0
 -- NOTE: For the `foldr` function, the operator `#` is assumed to associate to the right
 
+-- Q: is it possible to write `foldr` using recursion?
+
 -- 7.4 The `foldl` function
 -- This is the analog of `foldr` for the following recursion pattern:
 -- NOTE: Notice the use of the first argument as an **accumulator**
@@ -134,15 +136,20 @@ lc2 f p xs = map f (filter p xs)
 
 -- 2. Without looking at the definitions from the standard prelude, define the following
 --    higer-order library functions on lists:
+all__ :: (a -> Bool) -> [a] -> Bool
+all__ p [] = True
+all__ p (x:xs) = (&&) (p x) (all__ p xs)
+
+-- Using `foldr`
 all_ :: (a -> Bool) -> [a] -> Bool
-all_ p [] = True
-all_ p (x:xs) = p x && all_ p xs
+all_ p = foldr ((&&) . p) True
 
--- TODO: Add `fold` implementation.
+any_ :: (a -> Bool) -> [a] -> Bool
+any_ p = foldr ((||) . p) False
 
--- any_ :: (a -> Bool) -> [Bool] -> Bool
-
--- takeWhile_ :: (a -> Bool) -> [a] -> [a]
+takeWhile_ :: (a -> Bool) -> [a] -> [a]
+takeWhile_ p [] = []
+takeWhile_ p (x:xs) = (if p x then x else ) : takeWhile_ p xs
 
 -- dropWhile_ :: (a -> Bool) -> [a] -> [a]
 
@@ -170,3 +177,14 @@ main = do
     let a = [0,1,2,3,4,5]
     print (lc (+1) odd a)
     print (lc2 (+1) odd a)
+
+    let allTrue = [True, True, True]
+    let anyTrue = [True, False, True]
+    print (all_ id allTrue)        -- returns True
+    print (all_ id anyTrue)        -- returns False
+    print (any_ not allTrue)       -- returns False
+    print (any_ id anyTrue)        -- returns True
+
+    let someInts = [2,4,6,7,8]
+    print (takeWhile even someInts)
+    print (takeWhile_ even someInts)        -- returns [2,4,6] which ends at 6, since the next element is odd
