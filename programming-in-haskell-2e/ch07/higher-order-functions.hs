@@ -147,11 +147,16 @@ all_ p = foldr ((&&) . p) True
 any_ :: (a -> Bool) -> [a] -> Bool
 any_ p = foldr ((||) . p) False
 
+-- TODO: Is it possible to use `foldX`?
 takeWhile_ :: (a -> Bool) -> [a] -> [a]
 takeWhile_ p [] = []
-takeWhile_ p (x:xs) = (if p x then x else ) : takeWhile_ p xs
+takeWhile_ p (x:xs) | p x           = x : takeWhile_ p xs
+                    | otherwise     = []
 
--- dropWhile_ :: (a -> Bool) -> [a] -> [a]
+dropWhile_ :: (a -> Bool) -> [a] -> [a]
+dropWhile_ p [] = []
+dropWhile_ p (x:xs) | p x           = dropWhile_ p xs
+                    | otherwise     = x : xs
 
 -- 3. Redefine the functions `map f` and `filter p` using `foldr`.
 
@@ -188,3 +193,7 @@ main = do
     let someInts = [2,4,6,7,8]
     print (takeWhile even someInts)
     print (takeWhile_ even someInts)        -- returns [2,4,6] which ends at 6, since the next element is odd
+
+    let someMoreInts = [1,3,5,6,7]
+    print (dropWhile odd someMoreInts)
+    print (dropWhile_ odd someMoreInts)     -- returns [6,7] which starts at 6, since it is first even element
